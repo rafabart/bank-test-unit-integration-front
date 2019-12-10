@@ -3,8 +3,8 @@ import React from 'react'
 import NavbarItem from './NavbarItem'
 
 
-const navbar = (props) => 
-    <div className="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+const navbar = () => 
+    <div className="navbar navbar-expand-lg navbar-dark bg-primary">
         <div className="container">
 
             <a href="/home" className="navbar-brand">IconeHome</a>

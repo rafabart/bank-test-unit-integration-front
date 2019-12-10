@@ -1,20 +1,15 @@
 import React, { Component } from 'react'
 
-import Navbar from '../src/components/Navbar'
-// import TableComponent from './components/TableComponent'
+import Navbar from './components/Navbar'
 import Routers from './components/Routers'
 
+import 'primeicons/primeicons.css'
 import 'bootswatch/dist/darkly/bootstrap.css'
+import 'primereact/resources/primereact.min.css'
+import 'primereact/resources/themes/nova-light/theme.css'
 
 
 class App extends Component {
-
-  state = {
-    customer: [{ id: 1, cpf: '321.654.987-74', name: 'Rafael' },
-    { id: 1, cpf: '321.654.987-74', name: 'Rafael' }]
-
-  }
-
 
   render() {
 
@@ -23,7 +18,6 @@ class App extends Component {
       <>
         <Navbar />
         <div className="container">
-          {/* <TableComponent list={this.state.customer} /> */}
           <Routers />
         </div>
       </>
