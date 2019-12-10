@@ -7,7 +7,7 @@ const navbar = (props) =>
     <div className="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
         <div className="container">
 
-            <a href="#/home" className="navbar-brand">IconeHome</a>
+            <a href="/home" className="navbar-brand">IconeHome</a>
 
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarResponsive" aria-controls="navbarResponsive"
