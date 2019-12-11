@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import axios from "../../utils/httpClient"
 
 import { Growl } from 'primereact/growl'
@@ -10,27 +10,53 @@ import FormGroup from '../../components/FormGroup'
 class ListCustomer extends Component {
 
     state = {
+        customer: {            
+            cpf: '',
+            name: ''
+        },
         customers: []
     }
 
 
     componentDidMount() {
-        this.retrieveCustomers();
+        this.findCustomers()
+    }
+
+
+    handleChange = (event) => {
+        const value = event.target.value
+        const attribute = event.target.name
+
+        this.setState(({ customer }) => ({
+            customer: {
+                ...customer,
+                [attribute]: value
+            }
+        }))
     }
 
 
     handleRemove = (id) => {
         axios.delete(`/customers/${id}`)
-            .then(() => this.retrieveCustomers())
+            .then(() => this.findCustomers())
     }
+
 
     handleNewItem = () => {
         this.props.history.push('/customer')
     }
 
 
-    retrieveCustomers() {
-        axios.get("/customers")
+    handleEdit = (id) => {
+        this.props.history.push(`/customer/${id}`)
+    }
+
+
+    findCustomers = () => {
+
+        let params = `/customers?name=${this.state.customer.name}&cpf=${this.state.customer.cpf}`
+
+        axios.get(params)
             .then(({ data }) =>
                 this.setState({
                     customers: data
@@ -50,11 +76,11 @@ class ListCustomer extends Component {
                         <div className="col-lg-6">
                             <FormGroup htmlFor="inputName" label="Nome:">
                                 <input id="inputName" type="text"
-                                    name="ano"
+                                    name="name"
                                     className="form-control"
                                     placeholder="Digite o Nome"
-                                    value={this.state.year}
-                                    onChange={e => this.setState({ year: e.target.value })} />
+                                    value={this.state.customer.name}
+                                    onChange={this.handleChange} />
                             </FormGroup>
                         </div>
 
@@ -64,14 +90,14 @@ class ListCustomer extends Component {
                                     name="cpf"
                                     className="form-control"
                                     placeholder="Digite o CPF"
-                                    value={this.state.year}
-                                    onChange={e => this.setState({ year: e.target.value })} />
+                                    value={this.state.customer.cpf}
+                                    onChange={this.handleChange} />
                             </FormGroup>
 
                         </div>
                     </div>
 
-                    <button onClick={this.buscar} className="btn btn-sm btn-success mr-3">
+                    <button onClick={this.findCustomers} className="btn btn-sm btn-success mr-3">
                         <i className="pi pi-search"></i>Buscar</button>
                     <button onClick={this.handleNewItem} className="btn btn-sm btn-danger">
                         <i className="pi pi-plus"></i>Cadastrar</button>
@@ -94,12 +120,12 @@ class ListCustomer extends Component {
                                             <td>{customer.name}</td>
                                             <td>{customer.cpf}</td>
                                             <td>
+                                                <button className="btn btn-sm btn-primary mr-2" onClick={() => this.handleEdit(customer.id)}>
+                                                    Editar
+                                                </button>
                                                 <button className="btn btn-sm btn-danger mr-2" onClick={() => this.handleRemove(customer.id)}>
                                                     Remover
                                                 </button>
-                                                <Link to={`/customers/edit/${customer.id}`} className="btn btn-sm btn-primary">
-                                                    Alterar
-                                                </Link>
                                             </td>
                                         </tr>)}
                                     </tbody>

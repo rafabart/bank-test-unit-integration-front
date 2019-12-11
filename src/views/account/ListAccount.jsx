@@ -1,0 +1,190 @@
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+import axios from "../../utils/httpClient"
+
+import { Growl } from 'primereact/growl'
+
+import Card from '../../components/Card'
+import FormGroup from '../../components/FormGroup'
+import SelectMenu from '../../components/SelectMenu'
+
+class ListAccount extends Component {
+
+    state = {
+        account: {
+            numberAccount: '',
+            agency: '',
+            balance: '',
+            limitAccount: '',
+            accountTypeString: '',
+            idCustomer: ''
+        },
+        accounts: []
+    }
+
+
+    componentDidMount() {
+        this.findAccounts()
+    }
+
+
+    listAccountType() {
+        return [
+            { label: 'Selecione...', value: '' },
+            { label: 'Corrente', value: 'CHECKING' },
+            { label: 'Poupança', value: 'SAVINGS' }
+        ]
+    }
+
+
+    handleChange = (event) => {
+        const value = event.target.value
+        const attribute = event.target.name
+
+        this.setState(({ account }) => ({
+            account: {
+                ...account,
+                [attribute]: value
+            }
+        }))
+    }
+
+
+    handleRemove = (id) => {
+        axios.delete(`/accounts/${id}`)
+            .then(() => this.findAccounts())
+    }
+
+
+    handleNewItem = () => {
+        this.props.history.push('/account')
+    }
+
+
+    handleEdit = (id) => {
+        this.props.history.push(`/account/${id}`)
+    }
+
+
+    findAccounts = () => {
+
+        let { numberAccount, agency, balance, limitAccount, accountTypeString, idCustomer } = this.state.account
+
+        let params = `/accounts/?numberAccount=${numberAccount}&agency=${agency}&balance=${balance}
+                    &limitAccount=${limitAccount}&idCustomer=${idCustomer}&accountTypeString=${accountTypeString}`
+      
+        axios.get(params)
+            .then(({ data }) =>
+                this.setState({
+                    accounts: data
+                })
+            )
+
+    }
+
+
+
+    render() {
+
+        return (
+            <>
+                <Card title="Consulta de Contas">
+
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <FormGroup htmlFor="inputNumberAccount" label="Conta:">
+                                <input id="inputNumberAccount" type="text"
+                                    name="numberAccount"
+                                    className="form-control"
+                                    placeholder="Digite a Conta"
+                                    value={this.state.account.numberAccount}
+                                    onChange={this.handleChange} />
+                            </FormGroup>
+                        </div>
+
+                        <div className="col-lg-6">
+                            <FormGroup htmlFor="inputAgency" label="Agencia:">
+                                <input id="inputAgency" type="text"
+                                    name="agency"
+                                    className="form-control"
+                                    placeholder="Digite a Agencia"
+                                    value={this.state.account.agency}
+                                    onChange={this.handleChange} />
+                            </FormGroup>
+
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <FormGroup htmlFor="inputLimitAccount" label="Limite:">
+                                <input id="inputLimitAccount" type="text"
+                                    name="limitAccount"
+                                    className="form-control"
+                                    placeholder="Digite o Limite"
+                                    value={this.state.account.limitAccount}
+                                    onChange={this.handleChange} />
+                            </FormGroup>
+                        </div>
+
+                        <div className="col-lg-6">
+                            <FormGroup htmlFor="inputAccountTypeString" label="Tipo:">
+                                <SelectMenu className="form-control" name="accountTypeString"
+                                    lData={this.listAccountType()}
+                                    value={this.state.account.accountTypeString}
+                                    onChange={this.handleChange} />
+                            </FormGroup>
+
+                        </div>
+                    </div>
+
+                    <button onClick={this.findAccounts} className="btn btn-sm btn-success mr-3">
+                        <i className="pi pi-search"></i>Buscar</button>
+                    <button onClick={this.handleNewItem} className="btn btn-sm btn-danger">
+                        <i className="pi pi-plus"></i>Cadastrar</button>
+                </Card >
+
+                <Card>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="bs-component">
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Conta</th>
+                                            <th>Agencia</th>
+                                            <th>Balanço</th>
+                                            <th>Limite</th>
+                                            <th>Cliente</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.accounts.map(account => <tr key={account.id}>
+                                            <td>{account.numberAccount}</td>
+                                            <td>{account.agency}</td>
+                                            <td>{account.balance}</td>
+                                            <td>{account.limitAccount}</td>
+                                            <td>{account.customer.name}</td>
+                                            <td>
+                                                <button className="btn btn-sm btn-primary mr-2" onClick={() => this.handleEdit(account.id)}>
+                                                    Editar
+                                                </button>
+                                                <button className="btn btn-sm btn-danger mr-2" onClick={() => this.handleRemove(account.id)}>
+                                                    Remover
+                                                </button>
+                                            </td>
+                                        </tr>)}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <Growl ref={(el) => this.growl = el} />
+                </Card>
+            </>
+        )
+
+    }
+
+}
+export default withRouter(ListAccount)

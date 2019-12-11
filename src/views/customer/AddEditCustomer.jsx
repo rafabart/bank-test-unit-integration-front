@@ -6,7 +6,6 @@ import { Growl } from 'primereact/growl'
 
 import Card from '../../components/Card'
 import FormGroup from '../../components/FormGroup'
-import { element } from 'prop-types'
 
 
 class AddEditCustomer extends Component {
@@ -37,7 +36,7 @@ class AddEditCustomer extends Component {
     }
 
 
-    handleSubmit = (event) => {
+    handleSubmitSave = (event) => {
         event.preventDefault()
 
         axios.post("/customers", this.state.customer)
@@ -48,10 +47,45 @@ class AddEditCustomer extends Component {
 
                 let errors = response.data.errors
 
-                errors.forEach((element) => {                    
+                errors.forEach((element) => {
                     this.growl.show({ severity: 'error', summary: element.defaultMessage })
                 })
             })
+    }
+
+
+    handleSubmitUpdate = (event) => {
+        event.preventDefault()
+
+        axios.put(`/customers/${this.state.customer.id}`, this.state.customer)
+            .then(() => {
+                this.handleCancel()
+            })
+            .catch(({ response }) => {
+
+                let errors = response.data.errors
+
+                errors.forEach((element) => {
+                    this.growl.show({ severity: 'error', summary: element.defaultMessage })
+                })
+            })
+    }
+
+
+    componentDidMount() {
+        const params = this.props.match.params
+
+        if (params.id) {
+            axios.get(`/customers/${params.id}`)
+                .then(({ data }) => {
+                    this.setState({
+                        customer: data
+                    })
+                })
+                .catch(error => {
+                    this.growl.show({ severity: 'error', summary: 'Cliente não encontrado!' })
+                })
+        }
     }
 
 
@@ -87,10 +121,10 @@ class AddEditCustomer extends Component {
                         {
                             this.state.customer.id ?
                                 (
-                                    <button className="btn btn-sm btn-success mr-3" onClick={this.atualizar}>
+                                    <button className="btn btn-sm btn-success mr-3" onClick={this.handleSubmitUpdate}>
                                         <i className="pi pi-refresh"></i>Atualizar</button>
                                 ) : (
-                                    <button className="btn btn-sm btn-success mr-3" onClick={this.handleSubmit}>
+                                    <button className="btn btn-sm btn-success mr-3" onClick={this.handleSubmitSave}>
                                         <i className="pi pi-save"></i>Salvar</button>
                                 )
                         }

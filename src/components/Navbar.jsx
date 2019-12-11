@@ -20,7 +20,7 @@ const navbar = () =>
                 <ul className="navbar-nav">
                     <NavbarItem href="/home" label="Home" />
                     <NavbarItem href="/customers" label="Clientes" />
-                    <NavbarItem href="/" label="Contas" />
+                    <NavbarItem href="/accounts" label="Contas" />
                 </ul>
 
             </div>
