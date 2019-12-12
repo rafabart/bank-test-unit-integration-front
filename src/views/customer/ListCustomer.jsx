@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import axios from "../../utils/httpClient"
 
+import { Dialog } from 'primereact/dialog';
 import { Growl } from 'primereact/growl'
+import { Button } from 'primereact/button'
 
 import Card from '../../components/Card'
 import FormGroup from '../../components/FormGroup'
@@ -10,15 +12,24 @@ import FormGroup from '../../components/FormGroup'
 class ListCustomer extends Component {
 
     state = {
-        customer: {            
+        customer: {
+            id: '',
             cpf: '',
             name: ''
         },
-        customers: []
+        customers: [],
+        showConfirmDialog: false
     }
 
 
     componentDidMount() {
+
+        const params = this.props.match.params
+
+        if (params.message !== "cancel" && params.message !== undefined) {
+            this.growl.show({ severity: 'success', summary: params.message })
+        }
+
         this.findCustomers()
     }
 
@@ -36,8 +47,16 @@ class ListCustomer extends Component {
     }
 
 
-    handleRemove = (id) => {
-        axios.delete(`/customers/${id}`)
+    handleRemove = () => {
+
+        const customerClear = {
+            id: this.state.id,
+            name: '',
+            cpf: ''
+        }
+        
+        this.setState({ showConfirmDialog: true, customer: customerClear })
+        axios.delete(`/customers/${this.state.customer.id}`)
             .then(() => this.findCustomers())
     }
 
@@ -52,9 +71,16 @@ class ListCustomer extends Component {
     }
 
 
+    handleShowDialog = (customer) => {
+        this.setState({ showConfirmDialog: true, customer: customer })
+    }
+
+
     findCustomers = () => {
 
         let params = `/customers?name=${this.state.customer.name}&cpf=${this.state.customer.cpf}`
+
+        this.setState({ showConfirmDialog: false })
 
         axios.get(params)
             .then(({ data }) =>
@@ -65,8 +91,15 @@ class ListCustomer extends Component {
     }
 
 
-
     render() {
+
+        const footer = (
+            <div>
+                <Button label="Confirmar" icon="pi pi-check" onClick={this.handleRemove} className="btn btn-sm btn-primary mr-3" />
+                <Button label="Cancelar" icon="pi pi-times" onClick={() => this.setState({ showConfirmDialog: false })}
+                    className="p-button-secondary" />
+            </div>
+        )
 
         return (
             <>
@@ -97,9 +130,9 @@ class ListCustomer extends Component {
                         </div>
                     </div>
 
-                    <button onClick={this.findCustomers} className="btn btn-sm btn-success mr-3">
+                    <button onClick={this.findCustomers} className="btn btn-sm btn-primary mr-3">
                         <i className="pi pi-search"></i>Buscar</button>
-                    <button onClick={this.handleNewCustomer} className="btn btn-sm btn-danger">
+                    <button onClick={this.handleNewCustomer} className="btn btn-sm btn-success">
                         <i className="pi pi-plus"></i>Cadastrar</button>
                 </Card >
 
@@ -123,7 +156,7 @@ class ListCustomer extends Component {
                                                 <button className="btn btn-sm btn-primary mr-2" onClick={() => this.handleEdit(customer.id)}>
                                                     Editar
                                                 </button>
-                                                <button className="btn btn-sm btn-danger mr-2" onClick={() => this.handleRemove(customer.id)}>
+                                                <button className="btn btn-sm btn-danger mr-2" onClick={() => this.handleShowDialog(customer)}>
                                                     Remover
                                                 </button>
                                             </td>
@@ -133,7 +166,22 @@ class ListCustomer extends Component {
                             </div>
                         </div>
                     </div>
+
+
                     <Growl ref={(el) => this.growl = el} />
+
+
+                    <div>
+                        <Dialog header="Confirmação"
+                            visible={this.state.showConfirmDialog}
+                            style={{ width: '50vw' }}
+                            footer={footer}
+                            modal={true}
+                            onHide={() => this.setState({ showConfirmDialog: false })}>
+                            <p>Confirma a exclusão deste cliente?</p>
+                            <p>Nome: {this.state.customer.name}</p>
+                        </Dialog>
+                    </div>
                 </Card>
             </>
         )

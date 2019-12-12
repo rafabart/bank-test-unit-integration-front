@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 
-import Navbar from './components/Navbar'
 import Routers from './components/Routers'
 
 import 'primeicons/primeicons.css'
@@ -14,13 +13,7 @@ class App extends Component {
   render() {
 
     return (
-
-      <>
-        <Navbar />
-        <div className="container">
-          <Routers />
-        </div>
-      </>
+        <Routers />
     )
   }
 }

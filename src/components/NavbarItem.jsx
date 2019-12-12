@@ -1,9 +1,10 @@
 import React from 'react'
+import {NavLink} from 'react-router-dom'
 
 
 const navbarItem = (props) => 
     <li className="nav-item">
-        <a className="nav-link" onClick={props.onClick} href={props.href}>{props.label}</a>
+        <NavLink className="nav-link" onClick={props.onClick} to={props.href}>{props.label}</NavLink>
     </li>
     
 

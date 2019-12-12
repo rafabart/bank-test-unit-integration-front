@@ -19,7 +19,7 @@ class AddEditAccount extends Component {
             balance: '',
             limitAccount: '',
             accountTypeString: '',
-            idCustomer:''
+            idCustomer: ''
         },
         customers: []
     }
@@ -37,17 +37,17 @@ class AddEditAccount extends Component {
     }
 
 
-    handleCancel = () => {
-        this.props.history.push('/accounts')
+    handleCancel = (message) => {
+        this.props.history.push(`/accounts/${message}`)
     }
 
 
     handleSubmitSave = (event) => {
         event.preventDefault()
-        
+
         axios.post("/accounts", this.state.account)
             .then(() => {
-                this.handleCancel()
+                this.handleCancel('Nova Conta adicionada com sucesso')
             })
             .catch(({ response }) => {
 
@@ -60,19 +60,17 @@ class AddEditAccount extends Component {
     }
 
 
-    handleNewCustomer = () => {
-        this.props.history.push('/customer')
+    handleCancel = (message) => {
+        this.props.history.push(`/accounts/${message}`)
     }
 
 
     handleSubmitUpdate = (event) => {
         event.preventDefault()
 
-        console.log(this.state.account)
-
         axios.put(`/accounts/${this.state.account.id}`, this.state.account)
             .then(() => {
-                this.handleCancel()
+                this.handleCancel('Alteração de Conta realizada com sucesso')
             })
             .catch(({ response }) => {
 
@@ -92,7 +90,7 @@ class AddEditAccount extends Component {
 
         if (params.id) {
             axios.get(`/accounts/${params.id}`)
-                .then(({ data }) => {                    
+                .then(({ data }) => {
                     this.setState({
                         account: data
                     })
@@ -198,7 +196,7 @@ class AddEditAccount extends Component {
                         </FormGroup>
                     </div>
                     <div className="col-md-2 align-self-center mt-3">
-                        <button onClick={this.handleNewCustomer} className="btn btn-md btn-danger">
+                        <button onClick={this.handleNewCustomer} className="btn btn-md btn-success">
                             <i className="pi pi-plus"></i>Novo</button>
                     </div>
 
@@ -227,7 +225,7 @@ class AddEditAccount extends Component {
                                 )
                         }
 
-                        <button className="btn btn-sm btn-danger" onClick={this.handleCancel}>
+                        <button className="btn btn-sm btn-danger" onClick={() => this.handleCancel("cancel")}>
                             <i className="pi pi-times"></i>Cancelar</button>
                     </div>
                 </div>

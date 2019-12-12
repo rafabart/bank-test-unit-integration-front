@@ -31,8 +31,8 @@ class AddEditCustomer extends Component {
     }
 
 
-    handleCancel = () => {
-        this.props.history.push('/customers')
+    handleCancel = (message) => {
+        this.props.history.push(`/customers/${message}`)
     }
 
 
@@ -41,7 +41,7 @@ class AddEditCustomer extends Component {
 
         axios.post("/customers", this.state.customer)
             .then(() => {
-                this.handleCancel()
+                this.handleCancel('Novo Cliente adicionado com sucesso')
             })
             .catch(({ response }) => {
 
@@ -59,7 +59,7 @@ class AddEditCustomer extends Component {
 
         axios.put(`/customers/${this.state.customer.id}`, this.state.customer)
             .then(() => {
-                this.handleCancel()
+                this.handleCancel('Alteração de Cliente realizada com sucesso')
             })
             .catch(({ response }) => {
 
@@ -129,7 +129,7 @@ class AddEditCustomer extends Component {
                                 )
                         }
 
-                        <button className="btn btn-sm btn-danger" onClick={this.handleCancel}>
+                        <button className="btn btn-sm btn-danger" onClick={() => this.handleCancel("cancel")}>
                             <i className="pi pi-times"></i>Cancelar</button>
                     </div>
                 </div>

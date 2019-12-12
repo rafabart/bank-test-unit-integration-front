@@ -24,6 +24,11 @@ class ListAccount extends Component {
 
 
     componentDidMount() {
+        const params = this.props.match.params
+
+        if (params.message !== "cancel" && params.message !== undefined) {
+            this.growl.show({ severity: 'success', summary: params.message })
+        }
         this.findAccounts()
     }
 
@@ -89,7 +94,6 @@ class ListAccount extends Component {
                     accounts: data
                 })
             )
-
     }
 
 
@@ -147,9 +151,9 @@ class ListAccount extends Component {
                         </div>
                     </div>
 
-                    <button onClick={this.findAccounts} className="btn btn-sm btn-success mr-3">
+                    <button onClick={this.findAccounts} className="btn btn-sm btn-primary mr-3">
                         <i className="pi pi-search"></i>Buscar</button>
-                    <button onClick={this.handleNewItem} className="btn btn-sm btn-danger">
+                    <button onClick={this.handleNewItem} className="btn btn-sm btn-success">
                         <i className="pi pi-plus"></i>Cadastrar</button>
                 </Card >
 
@@ -164,6 +168,7 @@ class ListAccount extends Component {
                                             <th>Agencia</th>
                                             <th>Balanço</th>
                                             <th>Limite</th>
+                                            <th>Tipo</th>
                                             <th>Cliente</th>
                                             <th>Ações</th>
                                         </tr>
@@ -174,10 +179,14 @@ class ListAccount extends Component {
                                             <td>{account.agency}</td>
                                             <td>{account.balance}</td>
                                             <td>{account.limitAccount}</td>
+                                            <td>{account.accountTypeString}</td>
                                             <td>{account.customer.name}</td>
                                             <td>
                                                 <button className="btn btn-sm btn-success mr-2" onClick={() => this.handleDeposit(account.id)}>
                                                     Depositar
+                                                </button>
+                                                <button className="btn btn-sm btn-warning mr-2" onClick={() => this.handleWithdraw(account.id)}>
+                                                    Sacar
                                                 </button>
                                                 <button className="btn btn-sm btn-primary mr-2" onClick={() => this.handleEdit(account.id)}>
                                                     Editar

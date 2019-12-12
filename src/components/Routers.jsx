@@ -2,24 +2,32 @@ import React from 'react'
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-import ListCustomer from '../views/customer/ListCustomer'
+import AddEditAccount from '../views/account/AddEditAccount'
 import AddEditCustomer from '../views/customer/AddEditCustomer'
 import ListAccount from '../views/account/ListAccount'
-import AddEditAccount from '../views/account/AddEditAccount'
+import ListCustomer from '../views/customer/ListCustomer'
+import NavBar from '../components/Navbar'
 import NewDeposit from '../views/deposit/NewDeposit'
+import NewWithdraw from '../views/withdraw/NewWithdraw'
+import UrlException from '../views/exception/UrlException'
+
 
 
 const router = () =>
 
     <BrowserRouter>
-        <Switch>
-            <Route path="/customers" component={ListCustomer} />
-            <Route path="/customer/:id?" component={AddEditCustomer} />
-            <Route path="/accounts" component={ListAccount} />
-            <Route path="/account/:id?" component={AddEditAccount} />
-            <Route path="/deposit/:id" component={NewDeposit} />
-            
-        </Switch>
+        <NavBar />
+        <div className="container">
+            <Switch>
+                <Route path="/customers/:message?" exact component={ListCustomer} />
+                <Route path="/customer/:id?" exact component={AddEditCustomer} />
+                <Route path="/accounts/:message?" exact component={ListAccount} />
+                <Route path="/account/:id?" exact component={AddEditAccount} />
+                <Route path="/deposit/:id" exact component={NewDeposit} />
+                <Route path="/withdraw/:id" exact component={NewWithdraw} />
+                <Route path="*" component={UrlException} />
+            </Switch>
+        </div>
     </BrowserRouter>
 
 

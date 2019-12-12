@@ -8,10 +8,10 @@ import Card from '../../components/Card'
 import FormGroup from '../../components/FormGroup'
 
 
-class NewDeposit extends Component {
+class NewWithdraw extends Component {
 
     state = {
-        deposit: '',
+        withdraw: '',
         idAccount: '',
 
         account: {
@@ -38,7 +38,7 @@ class NewDeposit extends Component {
                     })
                 })
                 .catch(error => {
-                    this.Growl.show({ severity: 'error', summary: 'Conta não encontrada!' })
+                    this.growl.show({ severity: 'error', summary: 'Conta não encontrada!' })
                 })
         }
     }
@@ -60,31 +60,35 @@ class NewDeposit extends Component {
     handleSubmitSave = (event) => {
         event.preventDefault()
 
-        axios.post("/accounts/deposit", this.state)
+        axios.post("/accounts/withdraw", this.state)
             .then(() => {
-                this.handleCancel('Depósito realizado com sucesso')
+                this.handleCancel('Saque realizado com sucesso')
             })
             .catch(({ response }) => {
-                let errors = response.data.errors
+                if (response.status === 500) {
+                    this.growl.show({ severity: 'error', summary: response.data.message })
+                } else {
+                    let errors = response.data.errors
 
-                errors.forEach((element) => {
-                    this.growl.show({ severity: 'error', summary: element.defaultMessage })
-                })
+                    errors.forEach((element) => {
+                        this.growl.show({ severity: 'error', summary: element.defaultMessage })
+                    })
+                }
             })
     }
 
 
     render() {
         return (
-            <Card title="Novo depósito">
+            <Card title="Novo saque">
 
                 <div className="row">
                     <div className="col-md-6">
-                        <FormGroup id="inputDeposit" label="Valor: *">
-                            <input id="inputDeposit" type="text" name="deposit"
-                                value={this.state.deposit}
+                        <FormGroup id="inputWithdraw" label="Valor: *">
+                            <input id="inputWithdraw" type="text" name="withdraw"
+                                value={this.state.withdraw}
                                 className="form-control "
-                                placeholder="Digite o valor do depósito"
+                                placeholder="Digite o valor do saque"
                                 onChange={this.handleChange} />
                         </FormGroup>
                     </div>
@@ -124,7 +128,7 @@ class NewDeposit extends Component {
                 <div className="row">
                     <div className="col-md-12">
                         <button className="btn btn-sm btn-success mr-3" onClick={this.handleSubmitSave}>
-                            <i className="pi pi-save"></i>Depositar</button>
+                            <i className="pi pi-save"></i>Sacar</button>
                         <button className="btn btn-sm btn-danger" onClick={() => this.handleCancel("cancel")}>
                             <i className="pi pi-times"></i>Cancelar</button>
                     </div>
@@ -137,4 +141,4 @@ class NewDeposit extends Component {
     }
 }
 
-export default withRouter(NewDeposit)
+export default withRouter(NewWithdraw)
