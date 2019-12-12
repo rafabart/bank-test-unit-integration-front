@@ -42,7 +42,7 @@ class ListCustomer extends Component {
     }
 
 
-    handleNewItem = () => {
+    handleNewCustomer = () => {
         this.props.history.push('/customer')
     }
 
@@ -99,7 +99,7 @@ class ListCustomer extends Component {
 
                     <button onClick={this.findCustomers} className="btn btn-sm btn-success mr-3">
                         <i className="pi pi-search"></i>Buscar</button>
-                    <button onClick={this.handleNewItem} className="btn btn-sm btn-danger">
+                    <button onClick={this.handleNewCustomer} className="btn btn-sm btn-danger">
                         <i className="pi pi-plus"></i>Cadastrar</button>
                 </Card >
 

@@ -19,7 +19,7 @@ class AddEditAccount extends Component {
             balance: '',
             limitAccount: '',
             accountTypeString: '',
-            idCustomer: ''
+            idCustomer:''
         },
         customers: []
     }
@@ -44,8 +44,8 @@ class AddEditAccount extends Component {
 
     handleSubmitSave = (event) => {
         event.preventDefault()
-
-        axios.post("/accounts", this.state.customer)
+        
+        axios.post("/accounts", this.state.account)
             .then(() => {
                 this.handleCancel()
             })
@@ -60,8 +60,15 @@ class AddEditAccount extends Component {
     }
 
 
+    handleNewCustomer = () => {
+        this.props.history.push('/customer')
+    }
+
+
     handleSubmitUpdate = (event) => {
         event.preventDefault()
+
+        console.log(this.state.account)
 
         axios.put(`/accounts/${this.state.account.id}`, this.state.account)
             .then(() => {
@@ -85,16 +92,21 @@ class AddEditAccount extends Component {
 
         if (params.id) {
             axios.get(`/accounts/${params.id}`)
-                .then(({ data }) => {
+                .then(({ data }) => {                    
                     this.setState({
                         account: data
                     })
+                    this.setState(({ account }) => ({
+                        account: {
+                            ...account,
+                            idCustomer: data.customer.id
+                        }
+                    }))
                 })
                 .catch(error => {
                     this.growl.show({ severity: 'error', summary: 'Conta não encontrada!' })
                 })
         }
-
     }
 
 
@@ -123,9 +135,11 @@ class AddEditAccount extends Component {
 
         const { customers } = this.state
 
-        let customerList = []
+        let customerList = [{ label: 'Selecione...', value: '' }]
 
-        customers.map(customer => customerList.push({label: customer.name, value:customer.id}))
+        customers.map(customer => customerList.push({
+            label: `${customer.id}  --  ${customer.name}`, value: customer.id
+        }))
 
         return customerList
     }
@@ -175,13 +189,17 @@ class AddEditAccount extends Component {
                 </div>
                 <div className="row">
 
-                    <div className="col-md-6">
-                        <FormGroup htmlFor="inputIdCustomer" label="Cliente:">
+                    <div className="col-md-4">
+                        <FormGroup htmlFor="inputCustomer" label="Cliente:">
                             <SelectMenu className="form-control" name="idCustomer"
                                 listData={this.listCustomers()}
                                 value={this.state.account.idCustomer}
                                 onChange={this.handleChange} />
                         </FormGroup>
+                    </div>
+                    <div className="col-md-2 align-self-center mt-3">
+                        <button onClick={this.handleNewCustomer} className="btn btn-md btn-danger">
+                            <i className="pi pi-plus"></i>Novo</button>
                     </div>
 
                     <div className="col-md-6">

@@ -91,7 +91,7 @@ class AddEditCustomer extends Component {
 
     render() {
         return (
-            <Card title="Cadastro de Clientes">
+            <Card title={this.state.customer.id ? 'Alterar Cliente' : 'Cadastro de Cliente'}>
 
                 <div className="row">
                     <div className="col-md-6">

@@ -66,13 +66,23 @@ class ListAccount extends Component {
     }
 
 
+    handleDeposit = (id) => {
+        this.props.history.push(`/deposit/${id}`)
+    }
+
+
+    handleWithdraw = (id) => {
+        this.props.history.push(`/withdraw/${id}`)
+    }
+
+
     findAccounts = () => {
 
         let { numberAccount, agency, balance, limitAccount, accountTypeString, idCustomer } = this.state.account
 
         let params = `/accounts/?numberAccount=${numberAccount}&agency=${agency}&balance=${balance}
                     &limitAccount=${limitAccount}&idCustomer=${idCustomer}&accountTypeString=${accountTypeString}`
-      
+
         axios.get(params)
             .then(({ data }) =>
                 this.setState({
@@ -129,7 +139,7 @@ class ListAccount extends Component {
                         <div className="col-lg-6">
                             <FormGroup htmlFor="inputAccountTypeString" label="Tipo:">
                                 <SelectMenu className="form-control" name="accountTypeString"
-                                    lData={this.listAccountType()}
+                                    listData={this.listAccountType()}
                                     value={this.state.account.accountTypeString}
                                     onChange={this.handleChange} />
                             </FormGroup>
@@ -166,6 +176,9 @@ class ListAccount extends Component {
                                             <td>{account.limitAccount}</td>
                                             <td>{account.customer.name}</td>
                                             <td>
+                                                <button className="btn btn-sm btn-success mr-2" onClick={() => this.handleDeposit(account.id)}>
+                                                    Depositar
+                                                </button>
                                                 <button className="btn btn-sm btn-primary mr-2" onClick={() => this.handleEdit(account.id)}>
                                                     Editar
                                                 </button>
