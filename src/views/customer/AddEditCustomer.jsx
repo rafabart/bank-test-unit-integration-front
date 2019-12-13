@@ -18,6 +18,7 @@ class AddEditCustomer extends Component {
         }
     }
 
+
     handleChange = (event) => {
         const value = event.target.value
         const attribute = event.target.name
@@ -90,14 +91,17 @@ class AddEditCustomer extends Component {
 
 
     render() {
+
+        const { id, name, cpf } = this.state.customer
+
         return (
-            <Card title={this.state.customer.id ? 'Alterar Cliente' : 'Cadastro de Cliente'}>
+            <Card title={id ? 'Alterar Cliente' : 'Cadastro de Cliente'}>
 
                 <div className="row">
                     <div className="col-md-6">
                         <FormGroup id="inputCpf" label="CPF: *">
                             <input id="inputCpf" type="text" name="cpf"
-                                value={this.state.customer.cpf}
+                                value={cpf}
                                 className="form-control"
                                 onChange={this.handleChange} />
                         </FormGroup>
@@ -108,7 +112,7 @@ class AddEditCustomer extends Component {
                     <div className="col-md-6">
                         <FormGroup id="inputName" label="Nome: *">
                             <input id="inputName" type="text" name="name"
-                                value={this.state.customer.name}
+                                value={name}
                                 className="form-control"
                                 onChange={this.handleChange} />
                         </FormGroup>
@@ -119,7 +123,7 @@ class AddEditCustomer extends Component {
 
                         {/* Verifica qual botão renderizar, 'Salvar' ou  'Editar' */}
                         {
-                            this.state.customer.id ?
+                            id ?
                                 (
                                     <button className="btn btn-sm btn-success mr-3" onClick={this.handleSubmitUpdate}>
                                         <i className="pi pi-refresh"></i>Atualizar</button>

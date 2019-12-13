@@ -123,9 +123,9 @@ class ListAccount extends Component {
 
     findAccounts = () => {
 
-        let { numberAccount, agency, balance, limitAccount, accountTypeString, idCustomer } = this.state.account
+        const { numberAccount, agency, balance, limitAccount, accountTypeString, idCustomer } = this.state.account
 
-        let params = `/accounts/?numberAccount=${numberAccount}&
+        const params = `/accounts/?numberAccount=${numberAccount}&
                         agency=${agency}&
                         balance=${balance}&
                         limitAccount=${limitAccount}&
@@ -143,6 +143,8 @@ class ListAccount extends Component {
 
 
     render() {
+
+        const { numberAccount, agency, limitAccount, accountTypeString } = this.state.account
 
         const footer = (
             <div>
@@ -163,7 +165,7 @@ class ListAccount extends Component {
                                     name="numberAccount"
                                     className="form-control"
                                     placeholder="Digite a Conta"
-                                    value={this.state.account.numberAccount}
+                                    value={numberAccount}
                                     onChange={this.handleChange} />
                             </FormGroup>
                         </div>
@@ -174,7 +176,7 @@ class ListAccount extends Component {
                                     name="agency"
                                     className="form-control"
                                     placeholder="Digite a Agencia"
-                                    value={this.state.account.agency}
+                                    value={agency}
                                     onChange={this.handleChange} />
                             </FormGroup>
 
@@ -187,7 +189,7 @@ class ListAccount extends Component {
                                     name="limitAccount"
                                     className="form-control"
                                     placeholder="Digite o Limite"
-                                    value={this.state.account.limitAccount}
+                                    value={limitAccount}
                                     onChange={this.handleChange} />
                             </FormGroup>
                         </div>
@@ -196,7 +198,7 @@ class ListAccount extends Component {
                             <FormGroup htmlFor="inputAccountTypeString" label="Tipo:">
                                 <SelectMenu className="form-control" name="accountTypeString"
                                     listData={this.selectlistAccountType()}
-                                    value={this.state.account.accountTypeString}
+                                    value={accountTypeString}
                                     onChange={this.handleChange} />
                             </FormGroup>
 
@@ -267,7 +269,7 @@ class ListAccount extends Component {
                             modal={true}
                             onHide={() => this.setState({ showConfirmDialog: false })}>
                             <p>Confirma a exclusão desta conta?</p>
-                            <p>Conta: {this.state.account.numberAccount}</p>
+                            <p>Conta: {numberAccount}</p>
                         </Dialog>
                     </div>
 

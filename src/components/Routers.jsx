@@ -25,7 +25,7 @@ const router = () =>
                 <Route path="/customer/:id?" exact component={AddEditCustomer} />
                 <Route path="/customers/:message?" exact component={ListCustomer} />
                 <Route path="/deposit/:id" exact component={NewDeposit} />
-                <Route path="/home" exact component={Home} />
+                <Route path={["/home", "/"]} exact component={Home} />
                 <Route path="/withdraw/:id" exact component={NewWithdraw} />
                 <Route path="*" component={UrlException} />
             </Switch>

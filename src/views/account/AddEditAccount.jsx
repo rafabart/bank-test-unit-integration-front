@@ -19,6 +19,9 @@ class AddEditAccount extends Component {
             balance: '',
             limitAccount: '',
             accountTypeString: '',
+            customer: {
+                id: ''
+            },
             idCustomer: ''
         },
         customers: []
@@ -103,6 +106,7 @@ class AddEditAccount extends Component {
                 })
                 .catch(error => {
                     this.growl.show({ severity: 'error', summary: 'Conta não encontrada!' })
+                    console.log(error)
                 })
         }
     }
@@ -144,14 +148,17 @@ class AddEditAccount extends Component {
 
 
     render() {
+
+        const { id, numberAccount, agency, balance, limitAccount, accountTypeString, idCustomer, customer } = this.state.account
+
         return (
-            <Card title={this.state.account.id ? 'Alterar Conta' : 'Cadastro de Conta'}>
+            <Card title={id ? 'Alterar Conta' : 'Cadastro de Conta'}>
 
                 <div className="row">
                     <div className="col-md-6">
                         <FormGroup id="inputNumberAccount" label="Conta: *">
                             <input id="inputNumberAccount" type="text" name="numberAccount"
-                                value={this.state.account.numberAccount}
+                                value={numberAccount}
                                 className="form-control"
                                 onChange={this.handleChange} />
                         </FormGroup>
@@ -160,7 +167,7 @@ class AddEditAccount extends Component {
                     <div className="col-md-6">
                         <FormGroup id="inputAgency" label="Agencia: *">
                             <input id="inputAgency" type="text" name="agency"
-                                value={this.state.account.agency}
+                                value={agency}
                                 className="form-control"
                                 onChange={this.handleChange} />
                         </FormGroup>
@@ -170,7 +177,7 @@ class AddEditAccount extends Component {
                     <div className="col-md-6">
                         <FormGroup id="inputBalance" label="Saldo: *">
                             <input id="inputBalance" type="text" name="balance"
-                                value={this.state.account.balance}
+                                value={balance}
                                 className="form-control "
                                 onChange={this.handleChange} />
                         </FormGroup>
@@ -179,7 +186,7 @@ class AddEditAccount extends Component {
                     <div className="col-md-6">
                         <FormGroup id="inputLimitAccount" label="Limite: *">
                             <input id="inputLimitAccount" type="text" name="limitAccount"
-                                value={this.state.account.limitAccount}
+                                value={limitAccount}
                                 className="form-control"
                                 onChange={this.handleChange} />
                         </FormGroup>
@@ -191,8 +198,8 @@ class AddEditAccount extends Component {
                         <FormGroup htmlFor="inputCustomer" label="Cliente: *">
                             <SelectMenu className="form-control" name="idCustomer"
                                 listData={this.selectListCustomers()}
-                                value={this.state.account.idCustomer}
-                                selectedValue={this.state.account.idCustomer}
+                                value={idCustomer}
+                                selectedValue={customer.id}
                                 onChange={this.handleChange} />
                         </FormGroup>
                     </div>
@@ -205,8 +212,8 @@ class AddEditAccount extends Component {
                         <FormGroup htmlFor="inputAccountTypeString" label="Tipo: *">
                             <SelectMenu className="form-control" name="accountTypeString"
                                 listData={this.selectListAccountType()}
-                                value={this.state.account.accountTypeString}
-                                selectedValue={this.state.account.accountTypeString}
+                                value={accountTypeString}
+                                selectedValue={accountTypeString}
                                 onChange={this.handleChange} />
                         </FormGroup>
                     </div>
@@ -217,7 +224,7 @@ class AddEditAccount extends Component {
 
                         {/* Verifica qual botão renderizar, 'Salvar' ou  'Editar' */}
                         {
-                            this.state.account.id ?
+                            id ?
                                 (
                                     <button className="btn btn-sm btn-success mr-3" onClick={this.handleSubmitUpdate}>
                                         <i className="pi pi-refresh"></i>Atualizar</button>

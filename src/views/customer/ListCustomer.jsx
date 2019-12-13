@@ -99,10 +99,12 @@ class ListCustomer extends Component {
 
     render() {
 
+        const { name, cpf } = this.state.customer
+
         const footer = (
             <div>
                 <Button label="Confirmar" icon="pi pi-check" onClick={this.handleRemove} className="btn btn-sm btn-primary mr-3" />
-                <Button label="Cancelar" icon="pi pi-times" onClick={() =>this.handleCleanInput()}
+                <Button label="Cancelar" icon="pi pi-times" onClick={() => this.handleCleanInput()}
                     className="p-button-secondary" />
             </div>
         )
@@ -118,7 +120,7 @@ class ListCustomer extends Component {
                                     name="name"
                                     className="form-control"
                                     placeholder="Digite o Nome"
-                                    value={this.state.customer.name}
+                                    value={name}
                                     onChange={this.handleChange} />
                             </FormGroup>
                         </div>
@@ -129,7 +131,7 @@ class ListCustomer extends Component {
                                     name="cpf"
                                     className="form-control"
                                     placeholder="Digite o CPF"
-                                    value={this.state.customer.cpf}
+                                    value={cpf}
                                     onChange={this.handleChange} />
                             </FormGroup>
 
