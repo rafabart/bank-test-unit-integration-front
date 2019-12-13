@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
-import axios from "../../utils/httpClient"
 import { Growl } from 'primereact/growl'
 
+import axios from "../../utils/httpClient"
 import Card from '../../components/Card'
 import FormGroup from '../../components/FormGroup'
 
@@ -98,7 +98,7 @@ class AddEditCustomer extends Component {
                         <FormGroup id="inputCpf" label="CPF: *">
                             <input id="inputCpf" type="text" name="cpf"
                                 value={this.state.customer.cpf}
-                                className="form-control "
+                                className="form-control"
                                 onChange={this.handleChange} />
                         </FormGroup>
                     </div>

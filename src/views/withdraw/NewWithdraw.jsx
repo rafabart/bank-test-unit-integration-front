@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
-import axios from "../../utils/httpClient"
 import { Growl } from 'primereact/growl'
 
+import axios from "../../utils/httpClient"
 import Card from '../../components/Card'
 import FormGroup from '../../components/FormGroup'
 
@@ -78,7 +78,20 @@ class NewWithdraw extends Component {
     }
 
 
+    formatCurrency = (value) => {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+            .format(value)
+    }
+
+
     render() {
+
+        const { withdraw } = this.state
+
+        const { name } = this.state.account.customer
+
+        const { numberAccount, balance, limitAccount } = this.state.account
+
         return (
             <Card title="Novo saque">
 
@@ -86,8 +99,8 @@ class NewWithdraw extends Component {
                     <div className="col-md-6">
                         <FormGroup id="inputWithdraw" label="Valor: *">
                             <input id="inputWithdraw" type="text" name="withdraw"
-                                value={this.state.withdraw}
-                                className="form-control "
+                                value={withdraw}
+                                className="form-control"
                                 placeholder="Digite o valor do saque"
                                 onChange={this.handleChange} />
                         </FormGroup>
@@ -95,15 +108,15 @@ class NewWithdraw extends Component {
                     <div className="col-md-3">
                         <FormGroup id="inputNumberAccount" label="Conta">
                             <input id="inputNumberAccount" type="text" disabled
-                                className="form-control "
-                                value={this.state.account.numberAccount} />
+                                className="form-control"
+                                value={numberAccount} />
                         </FormGroup>
                     </div>
                     <div className="col-md-3">
                         <FormGroup id="inputCustomer" label="Cliente">
                             <input id="inputCustomer" type="text" disabled
-                                className="form-control "
-                                value={this.state.account.customer.name} />
+                                className="form-control"
+                                value={name} />
                         </FormGroup>
                     </div>
                 </div>
@@ -113,15 +126,15 @@ class NewWithdraw extends Component {
                     <div className="col-md-3">
                         <FormGroup id="inputBalance" label="Saldo">
                             <input id="inputBalance" type="text" disabled
-                                className="form-control "
-                                value={this.state.account.balance} />
+                                className={balance < 0 ? 'form-control text-danger' : 'form-control'}
+                                value={this.formatCurrency(balance)} />
                         </FormGroup>
                     </div>
                     <div className="col-md-3">
                         <FormGroup id="inputLimitAccount" label="Limite">
                             <input id="inputLimitAccount" type="text" disabled
-                                className="form-control "
-                                value={this.state.account.limitAccount} />
+                                className="form-control"
+                                value={this.formatCurrency(limitAccount)} />
                         </FormGroup>
                     </div>
                 </div>

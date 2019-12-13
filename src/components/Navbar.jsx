@@ -13,8 +13,7 @@ const navbar = () =>
                     <NavbarItem href="/home" label="Home" />
                     <NavbarItem href="/customers" label="Clientes" />
                     <NavbarItem href="/accounts" label="Contas" />
-                    <NavbarItem href="/deposit" label="Depositar" />
-                    <NavbarItem href="/withdraw" label="Sacar" />
+                    <NavbarItem href="/terminalLogin" label="Autoatendimento" />                    
                 </ul>
 
             </div>

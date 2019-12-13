@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
-import axios from "../../utils/httpClient"
 import { Growl } from 'primereact/growl'
 
+import axios from "../../utils/httpClient"
 import Card from '../../components/Card'
 import FormGroup from '../../components/FormGroup'
 import SelectMenu from '../../components/SelectMenu'
@@ -108,7 +108,7 @@ class AddEditAccount extends Component {
     }
 
 
-    listAccountType() {
+    selectListAccountType() {
         return [
             { label: 'Selecione...', value: '' },
             { label: 'Corrente', value: 'CHECKING' },
@@ -129,7 +129,7 @@ class AddEditAccount extends Component {
     }
 
 
-    listCustomers() {
+    selectListCustomers() {
 
         const { customers } = this.state
 
@@ -152,7 +152,7 @@ class AddEditAccount extends Component {
                         <FormGroup id="inputNumberAccount" label="Conta: *">
                             <input id="inputNumberAccount" type="text" name="numberAccount"
                                 value={this.state.account.numberAccount}
-                                className="form-control "
+                                className="form-control"
                                 onChange={this.handleChange} />
                         </FormGroup>
                     </div>
@@ -190,7 +190,7 @@ class AddEditAccount extends Component {
                     <div className="col-md-4">
                         <FormGroup htmlFor="inputCustomer" label="Cliente:">
                             <SelectMenu className="form-control" name="idCustomer"
-                                listData={this.listCustomers()}
+                                listData={this.selectListCustomers()}
                                 value={this.state.account.idCustomer}
                                 onChange={this.handleChange} />
                         </FormGroup>
@@ -203,7 +203,7 @@ class AddEditAccount extends Component {
                     <div className="col-md-6">
                         <FormGroup htmlFor="inputAccountTypeString" label="Tipo:">
                             <SelectMenu className="form-control" name="accountTypeString"
-                                listData={this.listAccountType()}
+                                listData={this.selectListAccountType()}
                                 value={this.state.account.accountTypeString}
                                 onChange={this.handleChange} />
                         </FormGroup>

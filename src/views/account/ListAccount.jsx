@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import axios from "../../utils/httpClient"
 
 import { Growl } from 'primereact/growl'
 
+import axios from "../../utils/httpClient"
 import Card from '../../components/Card'
 import FormGroup from '../../components/FormGroup'
 import SelectMenu from '../../components/SelectMenu'
@@ -24,6 +24,7 @@ class ListAccount extends Component {
 
 
     componentDidMount() {
+
         const params = this.props.match.params
 
         if (params.message !== "cancel" && params.message !== undefined) {
@@ -33,7 +34,7 @@ class ListAccount extends Component {
     }
 
 
-    listAccountType() {
+    selectlistAccountType() {
         return [
             { label: 'Selecione...', value: '' },
             { label: 'Corrente', value: 'CHECKING' },
@@ -81,13 +82,29 @@ class ListAccount extends Component {
     }
 
 
+    formatCurrency = (value) => {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+            .format(value)
+    }
+
+
+    formatAccountTypeString = (value) => {
+        return value === "CHECKING" ? "Corrente" : "Poupança"
+    }
+
+
     findAccounts = () => {
 
         let { numberAccount, agency, balance, limitAccount, accountTypeString, idCustomer } = this.state.account
 
-        let params = `/accounts/?numberAccount=${numberAccount}&agency=${agency}&balance=${balance}
-                    &limitAccount=${limitAccount}&idCustomer=${idCustomer}&accountTypeString=${accountTypeString}`
+        let params = `/accounts/?numberAccount=${numberAccount}&
+                        agency=${agency}&
+                        balance=${balance}&
+                        limitAccount=${limitAccount}&
+                        idCustomer=${idCustomer}&
+                        accountTypeString=${accountTypeString}`
 
+        console.log(params)
         axios.get(params)
             .then(({ data }) =>
                 this.setState({
@@ -143,7 +160,7 @@ class ListAccount extends Component {
                         <div className="col-lg-6">
                             <FormGroup htmlFor="inputAccountTypeString" label="Tipo:">
                                 <SelectMenu className="form-control" name="accountTypeString"
-                                    listData={this.listAccountType()}
+                                    listData={this.selectlistAccountType()}
                                     value={this.state.account.accountTypeString}
                                     onChange={this.handleChange} />
                             </FormGroup>
@@ -174,34 +191,39 @@ class ListAccount extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.state.accounts.map(account => <tr key={account.id}>
-                                            <td>{account.numberAccount}</td>
-                                            <td>{account.agency}</td>
-                                            <td>{account.balance}</td>
-                                            <td>{account.limitAccount}</td>
-                                            <td>{account.accountTypeString}</td>
-                                            <td>{account.customer.name}</td>
-                                            <td>
-                                                <button className="btn btn-sm btn-success mr-2" onClick={() => this.handleDeposit(account.id)}>
-                                                    Depositar
+                                        {this.state.accounts.map(account =>
+                                            <tr key={account.id}
+                                                className={account.balance < 0 ? 'text-danger' : ''}>
+
+                                                <td>{account.numberAccount}</td>
+                                                <td>{account.agency}</td>
+                                                <td>{this.formatCurrency(account.balance)}</td>
+                                                <td>{this.formatCurrency(account.limitAccount)}</td>
+                                                <td>{this.formatAccountTypeString(account.accountTypeString)}</td>
+                                                <td>{account.customer.name}</td>
+                                                <td>
+                                                    <button className="btn btn-sm btn-success mr-2" onClick={() => this.handleDeposit(account.id)}>
+                                                        Depositar
                                                 </button>
-                                                <button className="btn btn-sm btn-warning mr-2" onClick={() => this.handleWithdraw(account.id)}>
-                                                    Sacar
+                                                    <button className="btn btn-sm btn-warning mr-2" onClick={() => this.handleWithdraw(account.id)}>
+                                                        Sacar
                                                 </button>
-                                                <button className="btn btn-sm btn-primary mr-2" onClick={() => this.handleEdit(account.id)}>
-                                                    Editar
+                                                    <button className="btn btn-sm btn-primary mr-2" onClick={() => this.handleEdit(account.id)}>
+                                                        Editar
                                                 </button>
-                                                <button className="btn btn-sm btn-danger mr-2" onClick={() => this.handleRemove(account.id)}>
-                                                    Remover
+                                                    <button className="btn btn-sm btn-danger mr-2" onClick={() => this.handleRemove(account.id)}>
+                                                        Remover
                                                 </button>
-                                            </td>
-                                        </tr>)}
+                                                </td>
+                                            </tr>)}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+
                     <Growl ref={(el) => this.growl = el} />
+
                 </Card>
             </>
         )
