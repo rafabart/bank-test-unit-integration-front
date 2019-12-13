@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import axios from "../../utils/httpClient"
 
-import { Dialog } from 'primereact/dialog';
-import { Growl } from 'primereact/growl'
 import { Button } from 'primereact/button'
+import { Dialog } from 'primereact/dialog'
+import { Growl } from 'primereact/growl'
 
 import Card from '../../components/Card'
 import FormGroup from '../../components/FormGroup'
@@ -49,16 +49,24 @@ class ListCustomer extends Component {
 
     handleRemove = () => {
 
-        const customerClear = {
-            id: this.state.id,
-            name: '',
-            cpf: ''
-        }
-        
-        this.setState({ showConfirmDialog: true, customer: customerClear })
+        this.handleCleanInput()
+
         axios.delete(`/customers/${this.state.customer.id}`)
             .then(() => this.findCustomers())
     }
+
+
+
+    handleCleanInput = () => {
+
+        const customerClear = {
+            name: '',
+            cpf: ''
+        }
+
+        this.setState({ showConfirmDialog: false, customer: customerClear })
+    }
+
 
 
     handleNewCustomer = () => {
@@ -80,8 +88,6 @@ class ListCustomer extends Component {
 
         let params = `/customers?name=${this.state.customer.name}&cpf=${this.state.customer.cpf}`
 
-        this.setState({ showConfirmDialog: false })
-
         axios.get(params)
             .then(({ data }) =>
                 this.setState({
@@ -96,7 +102,7 @@ class ListCustomer extends Component {
         const footer = (
             <div>
                 <Button label="Confirmar" icon="pi pi-check" onClick={this.handleRemove} className="btn btn-sm btn-primary mr-3" />
-                <Button label="Cancelar" icon="pi pi-times" onClick={() => this.setState({ showConfirmDialog: false })}
+                <Button label="Cancelar" icon="pi pi-times" onClick={() =>this.handleCleanInput()}
                     className="p-button-secondary" />
             </div>
         )

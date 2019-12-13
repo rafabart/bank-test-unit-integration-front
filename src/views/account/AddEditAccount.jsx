@@ -188,10 +188,11 @@ class AddEditAccount extends Component {
                 <div className="row">
 
                     <div className="col-md-4">
-                        <FormGroup htmlFor="inputCustomer" label="Cliente:">
+                        <FormGroup htmlFor="inputCustomer" label="Cliente: *">
                             <SelectMenu className="form-control" name="idCustomer"
                                 listData={this.selectListCustomers()}
                                 value={this.state.account.idCustomer}
+                                selectedValue={this.state.account.idCustomer}
                                 onChange={this.handleChange} />
                         </FormGroup>
                     </div>
@@ -201,10 +202,11 @@ class AddEditAccount extends Component {
                     </div>
 
                     <div className="col-md-6">
-                        <FormGroup htmlFor="inputAccountTypeString" label="Tipo:">
+                        <FormGroup htmlFor="inputAccountTypeString" label="Tipo: *">
                             <SelectMenu className="form-control" name="accountTypeString"
                                 listData={this.selectListAccountType()}
                                 value={this.state.account.accountTypeString}
+                                selectedValue={this.state.account.accountTypeString}
                                 onChange={this.handleChange} />
                         </FormGroup>
                     </div>

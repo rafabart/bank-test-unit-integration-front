@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
+import { Dialog } from 'primereact/dialog'
+import { Button } from 'primereact/button'
 import { Growl } from 'primereact/growl'
 
 import axios from "../../utils/httpClient"
@@ -12,6 +14,7 @@ class ListAccount extends Component {
 
     state = {
         account: {
+            id: '',
             numberAccount: '',
             agency: '',
             balance: '',
@@ -19,7 +22,8 @@ class ListAccount extends Component {
             accountTypeString: '',
             idCustomer: ''
         },
-        accounts: []
+        accounts: [],
+        showConfirmDialog: false
     }
 
 
@@ -56,10 +60,29 @@ class ListAccount extends Component {
     }
 
 
-    handleRemove = (id) => {
-        axios.delete(`/accounts/${id}`)
+    handleRemove = () => {
+
+        this.handleCleanInput()
+
+        axios.delete(`/accounts/${this.state.account.id}`)
             .then(() => this.findAccounts())
     }
+
+
+    handleCleanInput = () => {
+
+        const accountClear = {
+            numberAccount: '',
+            agency: '',
+            balance: '',
+            limitAccount: '',
+            accountTypeString: '',
+            idCustomer: ''
+        }
+
+        this.setState({ showConfirmDialog: false, account: accountClear })
+    }
+
 
 
     handleNewItem = () => {
@@ -93,6 +116,11 @@ class ListAccount extends Component {
     }
 
 
+    handleShowDialog = (account) => {
+        this.setState({ showConfirmDialog: true, account: account })
+    }
+
+
     findAccounts = () => {
 
         let { numberAccount, agency, balance, limitAccount, accountTypeString, idCustomer } = this.state.account
@@ -104,7 +132,6 @@ class ListAccount extends Component {
                         idCustomer=${idCustomer}&
                         accountTypeString=${accountTypeString}`
 
-        console.log(params)
         axios.get(params)
             .then(({ data }) =>
                 this.setState({
@@ -116,6 +143,14 @@ class ListAccount extends Component {
 
 
     render() {
+
+        const footer = (
+            <div>
+                <Button label="Confirmar" icon="pi pi-check" onClick={this.handleRemove} className="btn btn-sm btn-primary mr-3" />
+                <Button label="Cancelar" icon="pi pi-times" onClick={this.handleCleanInput}
+                    className="p-button-secondary" />
+            </div>
+        )
 
         return (
             <>
@@ -211,7 +246,7 @@ class ListAccount extends Component {
                                                     <button className="btn btn-sm btn-primary mr-2" onClick={() => this.handleEdit(account.id)}>
                                                         Editar
                                                 </button>
-                                                    <button className="btn btn-sm btn-danger mr-2" onClick={() => this.handleRemove(account.id)}>
+                                                    <button className="btn btn-sm btn-danger mr-2" onClick={() => this.handleShowDialog(account)}>
                                                         Remover
                                                 </button>
                                                 </td>
@@ -223,6 +258,18 @@ class ListAccount extends Component {
                     </div>
 
                     <Growl ref={(el) => this.growl = el} />
+
+                    <div>
+                        <Dialog header="Confirmação"
+                            visible={this.state.showConfirmDialog}
+                            style={{ width: '50vw' }}
+                            footer={footer}
+                            modal={true}
+                            onHide={() => this.setState({ showConfirmDialog: false })}>
+                            <p>Confirma a exclusão desta conta?</p>
+                            <p>Conta: {this.state.account.numberAccount}</p>
+                        </Dialog>
+                    </div>
 
                 </Card>
             </>
