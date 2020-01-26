@@ -45,6 +45,11 @@ class AddEditAccount extends Component {
     }
 
 
+    handleNewCustomer = () => {
+        this.props.history.push('/customer')
+    }
+    
+
     handleSubmitSave = (event) => {
         event.preventDefault()
 
