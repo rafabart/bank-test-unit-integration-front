@@ -13,11 +13,13 @@ Usando:
 
 https://github.com/rafabart/bank-test-unit-integration
 
-Após clonar este projeto rodar o comando abaixo no terminar, na pasta raiz do projeto:
+Após clonar este projeto rodar o comando abaixo no terminar para instalar as dependências, na pasta raiz do projeto:
+
 ```yarn```
 
 
 Para subir a api, rodar o comando abaixo, na pasta raiz do projeto:
+
 ```yarn start```
 
 URL de acesso a api:
