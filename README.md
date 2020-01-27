@@ -9,15 +9,15 @@ Usando:
 * Primereact
 * Yarn
 
-Projeto backend para este projeto no link:
+<p>Projeto backend para este projeto no link:</p>
 https://github.com/rafabart/bank-test-unit-integration
 
 Após clonar este projeto rodar o comando abaixo no terminar, na pasta raiz do projeto:
-yarn
+```yarn```
 
 
 Para subir a api, rodar o comando abaixo, na pasta raiz do projeto:
-yarn start
+```yarn start```
 
 URL de acesso a api:
 http://localhost:3000/
